@@ -1,10 +1,20 @@
+using emptyProject_task.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<TaskDbContext>(opts =>
+{
+    opts.UseSqlServer(builder.Configuration["ConnectionStrings:TaskConnection"]);
+});
+builder.Services.AddScoped<ITaskRepository, EFTaskRepo>();
 var app = builder.Build();
-
+SeedData.EnsurePopulated(app);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

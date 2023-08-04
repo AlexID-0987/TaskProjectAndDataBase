@@ -1,34 +1,19 @@
-﻿using emptyProject_task.Models;
+﻿
+using emptyProject_task.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace emptyProject_task.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private ITaskRepository repo;
+        public HomeController (ITaskRepository taskRepository)
         {
-            _logger = logger;
+            repo = taskRepository;
         }
-
-        public IActionResult Index()
-        {
-            string str=" ";
-            @ViewBag.str="My Best padavan";
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+       public IActionResult Index()=>View(repo.weekTasks);
+        
+       
     }
 }
